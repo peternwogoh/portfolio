@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peter Nwogoh — Cloud &amp; Virtualization Engineer</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --cp-bg: #f7f4ef;
+    --cp-bg-elevated: #fcfbf8;
+    --cp-surface: #ffffff;
+    --cp-surface-soft: #f5f5f5;
+    --cp-border: #dedede;
+    --cp-border-strong: #919191;
+    --cp-text: #242424;
+    --cp-text-muted: #5c5c5c;
+    --cp-text-soft: #6f6f6f;
+    --cp-accent: #b11f4b;
+    --cp-accent-hover: #9a1a41;
+    --cp-accent-soft: rgba(177, 31, 75, 0.08);
+    --cp-accent-fg: #ffffff;
+    --cp-success: #16a34a;
+    --cp-danger: #dc2626;
+    --cp-warning: #f59e0b;
+    --cp-link: #0078d4;
+    --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+    --cp-overlay: rgba(255, 255, 255, 0.8);
+    --cp-panel: rgba(255, 255, 255, 0.86);
+    --cp-panel-strong: rgba(255, 255, 255, 0.96);
+    --cp-sheen: rgba(255, 255, 255, 0.55);
+    --cp-highlight: rgba(177, 31, 75, 0.12);
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --cp-bg: #3d3b3a;
+    --cp-bg-elevated: #343231;
+    --cp-surface: #292929;
+    --cp-surface-soft: #2e2e2e;
+    --cp-border: #474747;
+    --cp-border-strong: #5f5f5f;
+    --cp-text: #dedede;
+    --cp-text-muted: #919191;
+    --cp-text-soft: #b0b0b0;
+    --cp-accent: #fd8ea1;
+    --cp-accent-hover: #fb7b91;
+    --cp-accent-soft: rgba(253, 142, 161, 0.14);
+    --cp-accent-fg: #1a1a1a;
+    --cp-success: #4ade80;
+    --cp-danger: #f87171;
+    --cp-warning: #fbbf24;
+    --cp-link: #4da6ff;
+    --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+    --cp-overlay: rgba(41, 41, 41, 0.88);
+    --cp-panel: rgba(41, 41, 41, 0.72);
+    --cp-panel-strong: rgba(41, 41, 41, 0.96);
+    --cp-sheen: rgba(255, 255, 255, 0.04);
+    --cp-highlight: rgba(253, 142, 161, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--cp-bg);
+    color: var(--cp-text);
+    font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: var(--cp-link); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+  /* ---------- Ambient tech backdrop (whole page) ---------- */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--cp-accent) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--cp-accent) 7%, transparent) 1px, transparent 1px);
+    background-size: 42px 42px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 40%, transparent 90%);
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 40%, transparent 90%);
+    opacity: 0.7;
+  }
+
+  /* ---------- Hero backdrop: gradient mesh + floating cloud/tech icons ---------- */
+  .hero { position: relative; overflow: hidden; padding: 88px 0 56px; text-align: center; }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(600px 340px at 15% 15%, color-mix(in srgb, var(--cp-accent) 20%, transparent), transparent 65%),
+      radial-gradient(520px 320px at 85% 10%, color-mix(in srgb, var(--cp-accent) 14%, transparent), transparent 60%),
+      radial-gradient(700px 420px at 50% 100%, color-mix(in srgb, var(--cp-accent) 10%, transparent), transparent 70%);
+  }
+  .floaties { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .floaties svg {
+    position: absolute; opacity: 0.16; color: var(--cp-accent);
+    animation: drift 9s ease-in-out infinite;
+  }
+  .f1 { top: 12%; left: 6%;  width: 54px; animation-delay: 0s; }
+  .f2 { top: 62%; left: 10%; width: 40px; animation-delay: 1.2s; animation-duration: 11s; }
+  .f3 { top: 20%; left: 88%; width: 46px; animation-delay: 0.6s; animation-duration: 10s; }
+  .f4 { top: 70%; left: 90%; width: 38px; animation-delay: 2s; animation-duration: 8s; }
+  .f5 { top: 8%;  left: 46%; width: 34px; animation-delay: 1.6s; animation-duration: 12s; }
+  .f6 { top: 78%; left: 48%; width: 30px; animation-delay: 0.3s; animation-duration: 9.5s; }
+  @keyframes drift {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(6deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .floaties svg { animation: none; }
+  }
+
+  /* ---------- Nav ---------- */
+  header.site-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--cp-panel-strong);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--cp-border);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px; max-width: 980px; margin: 0 auto; gap: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.05rem; color: var(--cp-text); text-decoration: none; letter-spacing: 0.2px; }
+  .brand svg { width: 22px; height: 22px; color: var(--cp-accent); }
+  nav.links { display: flex; gap: 26px; align-items: center; }
+  nav.links a {
+    position: relative;
+    color: var(--cp-text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;
+    padding: 6px 2px;
+    transition: color 0.15s;
+  }
+  nav.links a::after {
+    content: ""; position: absolute; left: 0; right: 100%; bottom: -2px; height: 2px;
+    background: var(--cp-accent); transition: right 0.25s ease;
+  }
+  nav.links a:hover { color: var(--cp-accent); }
+  nav.links a:hover::after { right: 0; }
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+  .theme-toggle, .menu-btn {
+    background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 8px;
+    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    color: var(--cp-text); transition: border-color 0.15s, transform 0.15s, color 0.15s;
+  }
+  .theme-toggle:hover, .menu-btn:hover { border-color: var(--cp-accent); color: var(--cp-accent); transform: translateY(-1px); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .menu-btn { display: none; }
+  nav.links.open {
+    display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+    position: absolute; top: 60px; left: 0; right: 0;
+    background: var(--cp-surface); border-bottom: 1px solid var(--cp-border);
+    padding: 12px 24px 18px; box-shadow: var(--cp-shadow);
+  }
+
+  /* ---------- Hero content ---------- */
+  .avatar-wrap { position: relative; width: 116px; height: 116px; margin: 0 auto 22px; }
+  .avatar {
+    width: 116px; height: 116px; border-radius: 32px;
+    background: linear-gradient(135deg, var(--cp-accent), color-mix(in srgb, var(--cp-accent) 55%, var(--cp-bg)));
+    color: var(--cp-accent-fg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; font-weight: 700;
+    box-shadow: var(--cp-shadow);
+    transform: rotate(-4deg);
+  }
+  .avatar-badge {
+    position: absolute; bottom: -8px; right: -8px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--cp-surface); border: 2px solid var(--cp-bg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .avatar-badge svg { width: 20px; height: 20px; color: var(--cp-accent); }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+
+  .hero h1 { margin: 0 0 8px; font-size: 2.2rem; letter-spacing: 0.2px; }
+  .hero .role {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--cp-accent); font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;
+  }
+  .hero .loc { color: var(--cp-text-muted); font-size: 0.92rem; margin-bottom: 22px; display: inline-flex; align-items: center; gap: 6px; }
+  .hero .loc svg { width: 15px; height: 15px; }
+  .hero p.pitch { max-width: 640px; margin: 0 auto 26px; color: var(--cp-text-muted); font-size: 1.02rem; }
+
+  .contact-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--cp-surface); border: 1px solid var(--cp-border);
+    padding: 9px 16px; border-radius: 999px; text-decoration: none;
+    color: var(--cp-text); font-size: 0.88rem; font-weight: 600;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+    transition: border-color 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s, background 0.18s;
+  }
+  .pill:hover {
+    border-color: var(--cp-accent); color: var(--cp-accent); transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--cp-accent) 22%, transparent);
+    background: var(--cp-accent-soft);
+  }
+  .pill svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Wave divider ---------- */
+  .wave { display: block; width: 100%; height: 44px; margin-top: -2px; position: relative; z-index: 1; }
+  .wave path { fill: var(--cp-surface-soft); }
+
+  /* ---------- Sections ---------- */
+  section { padding: 56px 0; position: relative; z-index: 1; }
+  section.alt { background: var(--cp-surface-soft); }
+  h2.section-title {
+    font-size: 1.45rem; margin: 0 0 28px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2.section-title .dot {
+    width: 6px; height: 22px; background: var(--cp-accent); border-radius: 3px; display: inline-block;
+  }
+  h2.section-title .emoji { font-size: 1.2rem; }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* Cards */
+  .card {
+    background: var(--cp-surface); border: 1px solid var(--cp-border);
+    border-radius: 16px; padding: 22px 24px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--cp-accent) 40%, var(--cp-border));
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--cp-accent) 10%, transparent);
+  }
+
+  /* Experience */
+  .job { margin-bottom: 26px; position: relative; padding-left: 28px; }
+  .job:last-child { margin-bottom: 0; }
+  .job::before {
+    content: ""; position: absolute; left: -1px; top: 26px; bottom: -26px;
+    width: 2px; background: var(--cp-border);
+  }
+  .job:last-child::before { display: none; }
+  .job-dot {
+    position: absolute; left: -7px; top: 24px; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--cp-accent); box-shadow: 0 0 0 4px var(--cp-accent-soft);
+  }
+  .job-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .job-head .co { font-weight: 700; font-size: 1.05rem; }
+  .job-head .dates {
+    color: var(--cp-accent); background: var(--cp-accent-soft); font-size: 0.78rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .job-title { color: var(--cp-text-soft); font-weight: 600; font-size: 0.92rem; margin-bottom: 10px; font-style: italic; }
+  ul.job-bullets { margin: 0; padding-left: 20px; color: var(--cp-text-muted); font-size: 0.92rem; }
+  ul.job-bullets li { margin-bottom: 6px; }
+  ul.job-bullets li::marker { color: var(--cp-accent); }
+
+  /* Skills */
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .skill-card h3 { margin: 0 0 10px; font-size: 0.95rem; color: var(--cp-accent); display: flex; align-items: center; gap: 8px; }
+  .skill-card h3 svg { width: 18px; height: 18px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    background: var(--cp-surface-soft); border: 1px solid var(--cp-border);
+    color: var(--cp-text-muted); font-size: 0.78rem; padding: 4px 10px; border-radius: 999px;
+    transition: transform 0.15s, border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .tag:hover { transform: translateY(-2px) scale(1.05); border-color: var(--cp-accent); color: var(--cp-accent); background: var(--cp-accent-soft); }
+
+  /* Certifications */
+  .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cert-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--cp-surface); border: 1px solid var(--cp-border);
+    border-radius: 12px; padding: 12px 14px; font-size: 0.86rem;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .cert-item:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--cp-accent) 45%, var(--cp-border));
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--cp-accent) 12%, transparent);
+  }
+  .cert-item .icn {
+    width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+    background: var(--cp-accent-soft); display: flex; align-items: center; justify-content: center;
+  }
+  .cert-item svg { width: 18px; height: 18px; color: var(--cp-accent); }
+  .cert-item .yr { color: var(--cp-text-muted); font-size: 0.78rem; }
+
+  /* Education */
+  .edu-item { display: flex; gap: 14px; margin-bottom: 18px; }
+  .edu-item:last-child { margin-bottom: 0; }
+  .edu-icn {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    background: var(--cp-accent-soft); display: flex; align-items: center; justify-content: center;
+  }
+  .edu-icn svg { width: 20px; height: 20px; color: var(--cp-accent); }
+  .edu-item .deg { font-weight: 700; }
+  .edu-item .sch { color: var(--cp-text-muted); font-size: 0.9rem; }
+  .badge {
+    display: inline-block; background: var(--cp-accent-soft); color: var(--cp-accent);
+    font-size: 0.72rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* Projects */
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .proj-card { font-size: 0.88rem; }
+  .proj-card .p-title { font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .proj-card .p-title svg { width: 16px; height: 16px; color: var(--cp-accent); flex-shrink: 0; }
+  .proj-card .p-year {
+    color: var(--cp-accent); font-size: 0.74rem; font-weight: 700; margin-top: 8px; display: inline-block;
+    background: var(--cp-accent-soft); padding: 2px 9px; border-radius: 999px;
+  }
+
+  /* Contact CTA */
+  .contact-card { text-align: center; position: relative; overflow: hidden; }
+  .contact-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(500px 200px at 50% -20%, var(--cp-accent-soft), transparent 70%);
+    pointer-events: none;
+  }
+
+  footer {
+    text-align: center; padding: 30px 24px 44px; color: var(--cp-text-muted); font-size: 0.85rem;
+    position: relative; z-index: 1;
+  }
+  footer .heart { color: var(--cp-accent); }
+
+  @media (max-width: 700px) {
+    nav.links { display: none; }
+    .menu-btn { display: flex; }
+    .skills-grid, .cert-grid, .proj-grid { grid-template-columns: 1fr; }
+    .hero { padding: 64px 0 44px; }
+    .hero h1 { font-size: 1.7rem; }
+    section { padding: 44px 0; }
+    .floaties svg { opacity: 0.1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      Peter Nwogoh
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme">
+        <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="top"></div>
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="floaties" aria-hidden="true">
+    <svg class="f1" viewBox="0 0 24 24" fill="currentColor"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+    <svg class="f2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="6" rx="1"/><rect x="3" y="15" width="18" height="6" rx="1"/><circle cx="7" cy="6" r="0.6" fill="currentColor"/><circle cx="7" cy="18" r="0.6" fill="currentColor"/></svg>
+    <svg class="f3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+    <svg class="f4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg class="f5" viewBox="0 0 24 24" fill="currentColor"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+    <svg class="f6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </div>
+  <div class="wrap">
+    <div class="avatar-wrap">
+      <div class="avatar">PN</div>
+      <div class="avatar-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      </div>
+    </div>
+    <h1>Peter Nwogoh</h1>
+    <div class="role">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/></svg>
+      Support Engineer &middot; Azure VMware Solution (AVS), Microsoft
+    </div>
+    <div class="loc">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Wendell, NC
+    </div>
+    <p class="pitch">
+      Azure Support Engineer specializing in Azure VMware Solution (AVS) hybrid-cloud environments, with deep,
+      hands-on expertise across VMware vCenter, ESXi, NSX-T, and HCX. 8+ years of combined experience across
+      enterprise virtualization, storage, network, and systems administration.
+    </p>
+    <div class="contact-row">
+      <a class="pill" href="mailto:pnwogoh@outlook.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        pnwogoh@outlook.com
+      </a>
+      <a class="pill" href="tel:+19107799688">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        (910) 779-9688
+      </a>
+      <a class="pill" href="https://www.linkedin.com/in/peter-nwogoh/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V8h4v1.5A5 5 0 0 1 16 8z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+<svg class="wave" viewBox="0 0 1200 44" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,22 C200,44 400,0 600,16 C800,32 1000,4 1200,22 L1200,44 L0,44 Z"></path>
+</svg>
+
+<section id="about" class="alt reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>About <span class="emoji">🚀</span></h2>
+    <div class="card">
+      <p style="margin:0; color: var(--cp-text-muted);">
+        Proven track record resolving complex, business-critical customer issues within SLA and leading
+        hybrid-cloud migrations for enterprise workloads. Microsoft Certified: Azure AI Engineer Associate,
+        Azure Administrator, and Azure Network Engineer, plus VMware Certified Professional (VCP). Known for
+        building internal troubleshooting playbooks that raise team-wide resolution quality and consistency.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Experience <span class="emoji">💼</span></h2>
+
+    <div class="job">
+      <div class="job-dot"></div>
+      <div class="job-head">
+        <span class="co">Microsoft — USA</span>
+        <span class="dates">May 2022 – Present</span>
+      </div>
+      <div class="job-title">Support Engineer, Azure Specialized / Azure VMware Solution (Bare Metal) Team</div>
+      <ul class="job-bullets">
+        <li>Deliver technical support for enterprise customers running mission-critical workloads on Azure VMware Solution (AVS), resolving complex compute, storage, and networking issues within committed SLA targets.</li>
+        <li>Diagnose and resolve advanced issues across VMware vCenter, ESXi, NSX-T, and HCX in hybrid Azure/VMware environments, partnering directly with customer infrastructure teams.</li>
+        <li>Manage vCenter cluster health and integration of external datastores via Azure NetApp Files (ANF).</li>
+        <li>Guide customers through hybrid-cloud migration engagements using VMware HCX, from planning through post-migration validation.</li>
+        <li>Author and maintain internal troubleshooting documentation and knowledge-base content that improves resolution speed and consistency across the support team.</li>
+        <li>Contribute as a member of the Azure Copilot (AI) integration team, supporting data ingestion and testing for AI-assisted support tooling.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-dot"></div>
+      <div class="job-head">
+        <span class="co">Cyberspace Limited — Nigeria</span>
+        <span class="dates">Jan 2021 – Nov 2021</span>
+      </div>
+      <div class="job-title">Enterprise IT Infrastructure Support Engineer</div>
+      <ul class="job-bullets">
+        <li>Administered enterprise server and storage infrastructure across IBM, HP, Dell, and Lenovo platforms.</li>
+        <li>Deployed and managed VMware vSphere environments — ESXi, vCenter, distributed switch design, Storage DRS.</li>
+        <li>Configured vMotion, Storage vMotion, and vSphere HA to strengthen redundancy for production workloads.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-dot"></div>
+      <div class="job-head">
+        <span class="co">BluDive Technologies Limited — Nigeria</span>
+        <span class="dates">Feb 2018 – Dec 2020</span>
+      </div>
+      <div class="job-title">IT Infrastructure Technical Support Engineer</div>
+      <ul class="job-bullets">
+        <li>Administered IBM Power servers, storage systems, and tape libraries across production and DR environments; delivered PowerVM/AIX virtualization support.</li>
+        <li>Configured SAN/storage environments end-to-end: zoning, LUN provisioning, RAID, and host integration.</li>
+        <li>Delivered VMware vSphere/ESXi/vCenter installation, configuration, and upgrade support, including vMotion, DRS, and HA.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-dot"></div>
+      <div class="job-head">
+        <span class="co">Computer Warehouse Group — Nigeria</span>
+        <span class="dates">May 2017 – Dec 2017</span>
+      </div>
+      <div class="job-title">IT Technical Support — Academy Program</div>
+      <ul class="job-bullets">
+        <li>Built foundational skills deploying enterprise servers/storage and administering UNIX/Linux and Windows Server environments; delivered help desk support under ITIL-based problem lifecycle management.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="alt reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Technical Skills <span class="emoji">🛠️</span></h2>
+    <div class="skills-grid">
+      <div class="card skill-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>Cloud Platforms</h3>
+        <div class="tag-row">
+          <span class="tag">Microsoft Azure</span><span class="tag">Azure VMware Solution (AVS)</span>
+          <span class="tag">Azure NetApp Files</span><span class="tag">VNet</span><span class="tag">Storage</span>
+        </div>
+      </div>
+      <div class="card skill-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/></svg>Virtualization</h3>
+        <div class="tag-row">
+          <span class="tag">VMware vSphere</span><span class="tag">ESXi</span><span class="tag">vCenter</span>
+          <span class="tag">NSX-T</span><span class="tag">HCX</span><span class="tag">vMotion</span>
+          <span class="tag">DRS</span><span class="tag">HA</span>
+        </div>
+      </div>
+      <div class="card skill-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>Storage</h3>
+        <div class="tag-row">
+          <span class="tag">SAN Zoning</span><span class="tag">LUN Provisioning</span><span class="tag">RAID</span>
+          <span class="tag">IBM / Lenovo Storage</span>
+        </div>
+      </div>
+      <div class="card skill-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Systems &amp; ITSM</h3>
+        <div class="tag-row">
+          <span class="tag">Windows Server</span><span class="tag">Linux</span><span class="tag">Unix/AIX</span>
+          <span class="tag">Active Directory</span><span class="tag">ServiceNow</span><span class="tag">ITIL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certifications" class="reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Certifications <span class="emoji">🏆</span></h2>
+    <div class="cert-grid">
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Microsoft Certified: Azure AI Engineer Associate <div class="yr">2026</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Microsoft Certified: Azure AI Fundamentals <div class="yr">2025</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Microsoft Certified: Azure Network Engineer Associate <div class="yr">2024</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Microsoft Certified: Azure Administrator Associate <div class="yr">2023</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Microsoft Certified: Azure Fundamentals <div class="yr">2022</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Red Hat Certified System Administrator (RHCSA) <div class="yr">2020</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>VMware Certified Professional (VCP) — Data Center Virtualization &amp; Cloud Mgmt/Automation <div class="yr">2020</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>Commvault Certified Technical Professional <div class="yr">2019</div></div>
+      </div>
+      <div class="cert-item">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg></div>
+        <div>IBM Certified Specialist — Power Systems (Power9) <div class="yr">2018</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" class="alt reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Education <span class="emoji">🎓</span></h2>
+    <div class="card">
+      <div class="edu-item">
+        <div class="edu-icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
+        <div>
+          <div class="deg">Master of Science in Cybersecurity <span class="badge">In Progress</span></div>
+          <div class="sch">University of North Carolina at Greensboro (UNCG)</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
+        <div>
+          <div class="deg">Master of Information Technology (MSIT) — 2024</div>
+          <div class="sch">Grand Canyon University (Jan 2022 – Jun 2024)</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
+        <div>
+          <div class="deg">B.Tech, Project Management Technology — 2nd Class Upper Division (2014)</div>
+          <div class="sch">Federal University of Technology, Owerri</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Selected Projects <span class="emoji">📦</span></h2>
+    <div class="proj-grid">
+      <div class="card proj-card">
+        <div class="p-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>Azure Copilot (AI) Integration Team</div>
+        <div>Supported data ingestion and testing for Microsoft's AI-assisted support tooling initiative.</div>
+        <span class="p-year">2023</span>
+      </div>
+      <div class="card proj-card">
+        <div class="p-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>Zenith Pensions / Cybercloud</div>
+        <div>Led IBM Storwize v7000 deployment and a VMware cloud infrastructure management engagement.</div>
+        <span class="p-year">2021</span>
+      </div>
+      <div class="card proj-card">
+        <div class="p-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/></svg>IBM Infrastructure Refreshes</div>
+        <div>Led IBM Power9 deployment for Afriland First Bank (Uganda), Union Bank, and Polaris Bank, including SAN switch and flash storage integration.</div>
+        <span class="p-year">2019 – 2020</span>
+      </div>
+      <div class="card proj-card">
+        <div class="p-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/></svg>BluDive / CWG Infrastructure Build-outs</div>
+        <div>Designed a VMware vSphere infrastructure build-out and delivered ESXi installation/configuration.</div>
+        <span class="p-year">2018 – 2019</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="alt reveal">
+  <div class="wrap">
+    <h2 class="section-title"><span class="dot"></span>Contact <span class="emoji">👋</span></h2>
+    <div class="card contact-card">
+      <p style="margin-top:0; color: var(--cp-text-muted); position: relative;">Open to new opportunities in cloud, virtualization, and enterprise infrastructure engineering.</p>
+      <div class="contact-row" style="margin-top:18px; position: relative;">
+        <a class="pill" href="mailto:pnwogoh@outlook.com">Email me</a>
+        <a class="pill" href="tel:+19107799688">Call</a>
+        <a class="pill" href="https://www.linkedin.com/in/peter-nwogoh/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built with <span class="heart">&#9829;</span> by Peter Nwogoh &middot; Wendell, NC &middot; <span id="year"></span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile nav toggle
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Theme toggle (manual override on top of system preference)
+  const themeToggle = document.getElementById('themeToggle');
+  const sunIcon = document.getElementById('themeIconSun');
+  const moonIcon = document.getElementById('themeIconMoon');
+  function syncThemeIcon() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    sunIcon.style.display = isDark ? 'none' : 'block';
+    moonIcon.style.display = isDark ? 'block' : 'none';
+  }
+  syncThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    syncThemeIcon();
+  });
+
+  // Scroll-reveal animation
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -5% 0px' });
+    revealEls.forEach(el => io.observe(el));
+    // Safety net: ensure everything is visible even if the observer
+    // never fires for a given element (e.g. very short pages, reduced motion).
+    setTimeout(() => revealEls.forEach(el => el.classList.add('in')), 2500);
+  } else {
+    revealEls.forEach(el => el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
